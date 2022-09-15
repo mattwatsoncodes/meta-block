@@ -71,7 +71,7 @@ export default function Edit( {
 					help={ __( 'Choose the meta key that you wish to output.', 'meta-block' ) }
 					label={ __( 'Meta Key', 'meta-block' ) }
 					options={ metaKeys }
-					value={ tagName }
+					value={ metaKey }
 					onChange={ ( metaKey ) => setAttributes( { metaKey } ) }
 				/>
 			</PanelBody>
