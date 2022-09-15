@@ -1,0 +1,28 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "meta-block/meta-block",
+	"version": "0.1.0",
+	"title": "Meta Block",
+	"category": "theme",
+	"icon": "block-default",
+	"description": "Proof of Concept block that outputs a post meta field within a Query Loop Post Template block.",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "meta-block",
+	"editorScript": "file:./index.js",
+	"attributes": {
+		"metaKey": {
+			"type": "string"
+		},
+		"tagName": {
+			"type": "string",
+			"default": "span"
+		}
+	},
+	"usesContext": [
+		"postId",
+		"postType"
+	]
+}
