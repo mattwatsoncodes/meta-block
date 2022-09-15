@@ -3,6 +3,11 @@ import { PanelBody, SelectControl } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 
+/**
+ * Note that the context comes from `usesContext` in block.json,
+ * this is needed so the context from the query loop is passed into
+ * the block.
+ */
 export default function Edit( {
 	attributes: {
 		metaKey,
@@ -16,6 +21,16 @@ export default function Edit( {
 } ) {
 	const [ meta ] = useEntityProp( 'postType', postType, 'meta', postId );
 
+	/**
+	 * Filter out anything that is not a string.
+	 *
+	 * We will want to consider the following scenarios:
+	 * - What do we do if the meta provides array and we want to get hold of just
+	 *   one string within that array?
+	 * - Do we want to consider a table block for if we want to dump out an array
+	 *   of objects?
+	 * - Are there other block types that might be useful?
+	 */
 	const metaKeys = Object.entries( meta )
 		.filter( ( entry ) => typeof entry[1] === 'string' )
 		.map( ( entry ) => {
@@ -23,9 +38,7 @@ export default function Edit( {
 			return { label: metaIndex, value: metaIndex } ;
 		} );
 
-	if ( ! metaKey && metaKey !== 0 && metaKeys.length > 0 ) {
-		setAttributes( { metaKey: metaKeys[0].value } )
-	}
+	metaKeys.unshift( { label: __( 'Please Select...', 'meta-block '), value: '' } );
 
 	const metaValue = meta[ metaKey ] || '';
 	const TagName = tagName || 'span';
@@ -36,6 +49,7 @@ export default function Edit( {
 				className="meta-block-settings"
 				title={ __( 'Settings', 'meta-block' ) }
 			>
+				{ /* Not an extensive list of tags, but placed here as an example */ }
 				<SelectControl
 					help={ __( 'Choose the tag that should wrap the meta value.', 'meta-block' ) }
 					label={ __( 'Tag', 'meta-block' ) }
@@ -64,6 +78,7 @@ export default function Edit( {
 		</InspectorControls>
 	);
 
+	// If no metaValue is present we should output a placeholder block.
 	return (
 		<TagName { ...useBlockProps() }>
 			{ inspectorControls }
